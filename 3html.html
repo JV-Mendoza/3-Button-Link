@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML 3</title>
+    <style>
+        * {
+            margin: 0;
+            text-align: center;
+        }
+
+        .Content {
+            justify-content: space-between;
+            display: flex;
+            font-size: x-large;
+            margin: 50px;
+            gap: 20px;
+        }
+
+        .box {
+            border: solid;
+            margin: auto;
+            width: 15%;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .box1 {
+            background-color: aqua;
+        }
+
+        .box2 {
+            background-color: red;
+        }
+
+        .box3 {
+            background-color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>THIS IS WEBSITE HTML 3</h2>
+    <div class="Content">
+        <div class="box box1" onclick="openPage('1html.html')">1st HTML</div>
+        <div class="box box2" onclick="openPage('2html.html')">2nd HTML</div>
+        <div class="box box3" onclick="openPage('3html.html')">3rd HTML</div>
+    </div>
+    <script>
+        function openPage(url) {
+            // Get all opened pages from localStorage
+            const openedPages = JSON.parse(localStorage.getItem('openedPages')) || {};
+
+            if (openedPages[url]) {
+                // Try to focus the existing window
+                try {
+                    const existingWin = window.open('', url);
+                    if (existingWin && !existingWin.closed) {
+                        existingWin.focus();
+                        return false;
+                    }
+                } catch (e) {
+                    console.log("Couldn't focus window", e);
+                }
+            }
+
+            // Open new window and store its reference
+            const newWin = window.open(url, url);
+            if (newWin) {
+                openedPages[url] = true;
+                localStorage.setItem('openedPages', JSON.stringify(openedPages));
+            }
+            return false;
+        }
+
+        // Register this page as opened when it loads
+        window.addEventListener('load', () => {
+            const openedPages = JSON.parse(localStorage.getItem('openedPages')) || {};
+            openedPages[window.location.pathname] = true;
+            localStorage.setItem('openedPages', JSON.stringify(openedPages));
+        });
+    </script>
+</body>
+
+</html>
